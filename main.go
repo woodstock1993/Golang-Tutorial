@@ -6,15 +6,20 @@ import (
 )
 
 func main() {
-	dic := dict.Dictionary{}
-	err := dic.Add("hello", "Greeting")
+	dictionary := dict.Dictionary{}
+	word := "hello"
+	definition := "Greeting"
+	err := dictionary.Add(word, definition)
+	
+	// Add 하지 못했을 때
 	if err != nil {
 		fmt.Println(err)
 	}
-	value, _ := dic.Search("hello")
-	fmt.Println(value)
-	err2 := dic.Add("hello", "Greeting")
-	if err2 != nil{
+	hello, _ := dictionary.Search(word)
+	fmt.Println("key", word, "value:", hello)
+	err2 := dictionary.Add(word, definition)
+	if err2 != nil {
 		fmt.Println(err2)
+	// }
 	}
 }
