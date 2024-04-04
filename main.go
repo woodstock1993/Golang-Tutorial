@@ -11,9 +11,13 @@ import (
 var RequestFailed = errors.New("Request Failed")
 
 func main() {
-	go sexyCount("nico")
-	go sexyCount("flynn")
-	time.Sleep(time.Second * 5)
+	c := make(chan bool)
+	people := [2]string{"nico", "flynn"}
+	for _, person := range people {
+		go isSexy(person, c)
+	}
+	fmt.Println(<-c)
+	fmt.Println(<-c)	
 }
 
 
@@ -26,9 +30,8 @@ func hitURL(url string) (error){
 	return nil
 }
 
-func sexyCount(person string) {
-	for i := 0; i < 10; i++ {
-		fmt.Println(person, "is sexy", i)
-		time.Sleep(time.Second)
-	}
+func isSexy(person string,  c chan bool) {
+	fmt.Println(person)
+	time.Sleep(time.Second * 5)
+	c <- true
 }
