@@ -1,25 +1,46 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"github.com/serranoarevalo/learngo/dict"
+	"net/http"
+	// "github.com/serranoarevalo/learngo/dict"
 )
 
+var RequestFailed = errors.New("Request Failed")
+
 func main() {
-	dictionary := dict.Dictionary{}
-	word := "hello"
-	definition := "Greeting"
-	err := dictionary.Add(word, definition)
+	var results = make(map[string]string)
+	urls := []string{
+		"https://www.airbnb.com/",
+		"https://www.google.com/",
+		"https://www.amazon.com/",
+		"https://www.redit.com/",
+		"https://www.soundcloud.com/",
+		"https://www.facebook.com/",
+		"https://www.instagram.com/",
+		"https://academy.nomadcoders.co/",		
+	}
 	
-	// Add 하지 못했을 때
-	if err != nil {
-		fmt.Println(err)
+	for _, value := range urls {
+		result := "OK"
+		err := hitURL(value)
+		if err != nil {
+			result = "FAILED"
+		}
+		results[value] = result
 	}
-	hello, _ := dictionary.Search(word)
-	fmt.Println("key", word, "value:", hello)
-	err2 := dictionary.Add(word, definition)
-	if err2 != nil {
-		fmt.Println(err2)
-	// }
+	for url, result := range results {
+		fmt.Println(url, result)
+	}	
+}
+
+
+func hitURL(url string) (error){
+	fmt.Println("Checking:", url)
+	res, err := http.Get(url)
+	if err != nil || res.StatusCode >= 400 {
+		return RequestFailed
 	}
+	return nil
 }
