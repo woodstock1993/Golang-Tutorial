@@ -10,6 +10,8 @@ type Account struct {
 	Balance int
 }
 
+var mutex sync.Mutex // ❶ 패키지 전역 변수 뮤텍스
+
 func main() {
 	var wg sync.WaitGroup
 
@@ -27,6 +29,8 @@ func main() {
 }
 
 func DepositAndWithdraw(account *Account) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if account.Balance < 0 { // ➍ 잔고가 0이하면 패닉
 		panic(fmt.Sprintf("Balance should not be negative value: %d", account.Balance))
 	}
